@@ -1,0 +1,8 @@
+{
+  "cg_asset_platforms":
+    {
+      "filename": "coingecko/asset_platforms.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/asset_platforms"
+    }
+}
