@@ -1,5 +1,5 @@
 # import config
-from .config import CONFIG
+from config import CONFIG
 
 # import packages
 import json, os
@@ -48,7 +48,7 @@ class Acquisition():
 
 
     @classmethod
-    def readDataLocally(cls, whichData="cg_asset_platforms", downloadIfMissing=True, forceUpdate=False):
+    def readDataLocally(cls, whichData="cg_asset_platforms", downloadIfMissing=True, forceUpdate=False, **kwargs):
         """Read data from a given table or fetch it, if its not there.
 
         Args:
@@ -68,13 +68,13 @@ class Acquisition():
         
         if not isFileFlag:
             if downloadIfMissing:
-                status = cls.updateDataLocally(whichData=whichData)
+                status = cls.updateDataLocally(whichData=whichData, **kwargs)
             if not downloadIfMissing or status!=200:
                 raise cls.cannotGetTableException
 
         else:
             if forceUpdate:
-                status = cls.updateDataLocally(whichData=whichData)
+                status = cls.updateDataLocally(whichData=whichData, **kwargs)
                 if status!=200:
                     raise cls.cannotGetTableException
             
@@ -86,7 +86,7 @@ class Acquisition():
 
 
     @classmethod
-    def updateDataLocally(cls, whichData="cg_asset_platforms"):
+    def updateDataLocally(cls, whichData="cg_asset_platforms", **kwargs):
         """Updates data by writing into the respective data table (check data_sources.json for reference).
 
         Args:
@@ -98,7 +98,11 @@ class Acquisition():
 
         completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
         dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
-        req = requests.get(dataAPI)
+        defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
+        apiRawParams = cls._getInfoFromTableName(whichData=whichData, info="api_raw_params")
+        dataApiFormatted = dataAPI.format(**apiRawParams)
+        defaultParams.update(kwargs)
+        req = requests.get(dataApiFormatted, params=defaultParams)
         if req.status_code==200:
             with open(completeFilePath, "w") as file:
                 json.dump(req.json(), file, indent=2)
