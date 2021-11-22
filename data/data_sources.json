@@ -3,6 +3,52 @@
     {
       "filename": "coingecko/asset_platforms.json",
       "update": 0,
-      "api": "https://api.coingecko.com/api/v3/asset_platforms"
-    }
+      "api": "https://api.coingecko.com/api/v3/asset_platforms",
+      "api_raw_params": {},
+      "default_params": {}
+      
+    },
+  "cg_supported_coins":
+    {
+      "filename": "coingecko/supported_coins.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/list",
+      "api_raw_params": {},
+      "default_params":
+        {
+          "include_platform": "true"
+        }
+    },
+    "cg_dai_usd":
+      {
+        "filename": "coingecko/dai_usd.json",
+        "update": 0,
+        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+        "api_raw_params": 
+          {
+            "coinId": "dai"
+          },
+        "default_params":
+          {
+            "vs_currency": "usd",
+            "from": 0,
+            "to": 0
+          }
+      },
+      "cg_btc_usd":
+      {
+        "filename": "coingecko/btc_usd.json",
+        "update": 0,
+        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+        "api_raw_params": 
+          {
+            "coinId": "bitcoin"
+          },
+        "default_params":
+          {
+            "vs_currency": "usd",
+            "from": 1392577232,
+            "to": 1412577232
+          }
+      }
 }
