@@ -5,8 +5,7 @@
       "update": 0,
       "api": "https://api.coingecko.com/api/v3/asset_platforms",
       "api_raw_params": {},
-      "default_params": {}
-      
+      "default_params": {}    
     },
   "cg_supported_coins":
     {
@@ -19,68 +18,119 @@
           "include_platform": "true"
         }
     },
-    "cg_dai_usd":
+  "cg_dai_usd":
+    {
+      "filename": "coingecko/dai_usd.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+      "api_raw_params": 
+        {
+          "coinId": "dai"
+        },
+      "default_params":
+        {
+          "vs_currency": "usd",
+          "from": 1574035200,
+          "to": 1637937555
+        }
+    },
+  "cg_btc_usd":
+    {
+      "filename": "coingecko/btc_usd.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+      "api_raw_params": 
+        {
+          "coinId": "bitcoin"
+        },
+      "default_params":
+        {
+          "vs_currency": "usd",
+          "from": 1392577232,
+          "to": 1412577232
+        }
+    },
+  "cg_mkr_usd":
+    {
+      "filename": "coingecko/mkr_usd.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+      "api_raw_params": 
+        {
+          "coinId": "maker"
+        },
+      "default_params":
+        {
+          "vs_currency": "usd",
+          "from": 1574035200,
+          "to": 1637937555
+        }
+    },
+  "cg_ust_usd":
+    {
+      "filename": "coingecko/ust_usd.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+      "api_raw_params": 
+        {
+          "coinId": "terrausd"
+        },
+      "default_params":
+        {
+          "vs_currency": "usd",
+          "from": 1574035200,
+          "to": 1637937555
+        },
+      "data_structure":
       {
-        "filename": "coingecko/dai_usd.json",
-        "update": 0,
-        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
-        "api_raw_params": 
-          {
-            "coinId": "dai"
-          },
-        "default_params":
-          {
-            "vs_currency": "usd",
-            "from": 1574035200,
-            "to": 1637937555
-          }
-      },
-      "cg_btc_usd":
-      {
-        "filename": "coingecko/btc_usd.json",
-        "update": 0,
-        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
-        "api_raw_params": 
-          {
-            "coinId": "bitcoin"
-          },
-        "default_params":
-          {
-            "vs_currency": "usd",
-            "from": 1392577232,
-            "to": 1412577232
-          }
-      },
-      "cg_mkr_usd":
-      {
-        "filename": "coingecko/mkr_usd.json",
-        "update": 0,
-        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
-        "api_raw_params": 
-          {
-            "coinId": "maker"
-          },
-        "default_params":
-          {
-            "vs_currency": "usd",
-            "from": 1574035200,
-            "to": 1637937555
-          }
-      },
-      "cg_ust_usd":
-      {
-        "filename": "coingecko/ust_usd.json",
-        "update": 0,
-        "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
-        "api_raw_params": 
-          {
-            "coinId": "terrausd"
-          },
-        "default_params":
-          {
-            "vs_currency": "usd",
-            "from": 1574035200,
-            "to": 1637937555
-          }
+        "price": [
+          [
+            ["key", "prices"], 
+            ["index", 1]
+          ]
+        ],
+        "total_volume": [
+          [
+            ["key", "total_volume"], 
+            ["index", 1]
+          ]
+        ],
+        "market_cap": [
+          [
+            ["key", "market_caps"], 
+            ["index", 1]
+          ]
+        ],
+        "time": [
+          [
+            ["key", "prices"],
+            ["index", 0]
+          ],
+          [
+            ["key", "market_caps"],
+            ["index", 0]
+          ],
+          [
+            ["key", "total_volume"],
+            ["index", 0]
+          ]
+        ]
       }
+    },
+  "cg_usdt_usd":
+    {
+      "filename": "coingecko/usdt_usd.json",
+      "update": 0,
+      "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+      "api_raw_params": 
+        {
+          "coinId": "tether"
+        },
+      "default_params":
+        {
+          "vs_currency": "usd",
+          "from": 1574035200,
+          "to": 1637937555
+        }
+    }
 }
