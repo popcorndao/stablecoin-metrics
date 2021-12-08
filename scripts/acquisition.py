@@ -5,6 +5,16 @@ from config import CONFIG
 import json, os
 import requests
 
+# import deepcopy
+from copy import deepcopy
+
+# import numpy and pandas
+import numpy as np
+import pandas as pd
+
+# datetime
+from datetime import datetime as dt
+
 
 class Acquisition():
     """Class that handles data acquisition and retrieval."""
@@ -13,6 +23,12 @@ class Acquisition():
     noSuchTableException = Exception('No such data table exists. Please see the ./data directory for allowed table names and either use one of the existing names or add this table to the list together with the api rquired to fetch it.')
     noSuchInfoException = Exception('No such information exists for this table. Please see the ./data directory for allowed information keys and either use one of the existing keys or add this new key to the list together with the required value.')
     cannotGetTableException = Exception('We cannot retrieve the data from this table, either because the api request failed or because you have requested not to get the data in the first place (check attributes of the methods you used).')
+    cannotReachAPIEndpoint = lambda status: Exception('We pinged the API endpoint and cannot get through, because the status-code is: {code}.'.format(code=status))
+
+
+    @classmethod
+    def _setInfoFromTableName(cls, whichData, key="update", value=str(dt.now())):
+        CONFIG.write(whichData=whichData, key=key, value=value)
 
 
     @classmethod
@@ -36,15 +52,15 @@ class Acquisition():
             if info not in CONFIG.DataSources[whichData]:
                 raise cls.noSuchInfoException
             filename = CONFIG.DataSources[whichData][info]
-            return os.path.join(CONFIG.DataDirectory, filename)
+            return deepcopy(os.path.join(CONFIG.DataDirectory, filename))
         elif info=="api":
             if info not in CONFIG.DataSources[whichData]:
                 raise cls.noSuchInfoException
-            return CONFIG.DataSources[whichData][info]
+            return deepcopy(CONFIG.DataSources[whichData][info])
         else:
             if info not in CONFIG.DataSources[whichData]:
                 raise cls.noSuchInfoException
-            return CONFIG.DataSources[whichData][info]
+            return deepcopy(CONFIG.DataSources[whichData][info])
 
 
     @classmethod
@@ -66,23 +82,43 @@ class Acquisition():
         completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
         isFileFlag = os.path.isfile(completeFilePath)
         
+        # check whether csv-file exists. If not:
         if not isFileFlag:
             if downloadIfMissing:
                 status = cls.updateDataLocally(whichData=whichData, **kwargs)
             if not downloadIfMissing or status!=200:
                 raise cls.cannotGetTableException
 
+        # If csv-file exists, then:
         else:
+            # only update when forceUpdate flag is put
             if forceUpdate:
                 status = cls.updateDataLocally(whichData=whichData, **kwargs)
                 if status!=200:
                     raise cls.cannotGetTableException
             
-        
-        with open(completeFilePath, "r") as file:
-            returnData = json.load(file)
+        returnData = cls.fetchDataLocally(whichData=whichData, **kwargs)
 
         return returnData
+
+
+    @classmethod
+    def fetchDataLocally(cls, whichData, **kwargs):
+        completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
+        isFileFlag = os.path.isfile(completeFilePath)
+        
+        # check whether csv-file exists. If not:
+        if not isFileFlag:
+            return pd.DataFrame()
+
+        if not kwargs:
+            return pd.read_csv(completeFilePath, sep=',', index_col=0)
+        
+        df = pd.read_csv(completeFilePath, sep=',', index_col=0)
+        if "from" in kwargs and "to" in kwargs:
+            return df[(df.time<=kwargs["to"]) & (df.time>=kwargs["from"])].copy()
+        
+        return df
 
 
     @classmethod
@@ -100,11 +136,88 @@ class Acquisition():
         dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
         defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
         apiRawParams = cls._getInfoFromTableName(whichData=whichData, info="api_raw_params")
+        dataStructure = cls._getInfoFromTableName(whichData=whichData, info="data_structure")
         dataApiFormatted = dataAPI.format(**apiRawParams)
         defaultParams.update(kwargs)
         req = requests.get(dataApiFormatted, params=defaultParams)
         if req.status_code==200:
-            with open(completeFilePath, "w") as file:
-                json.dump(req.json(), file, indent=2)
+
+            df_new = pd.DataFrame(data={
+                key: get_data(data=req.json(),specs=val)
+                for key, val in dataStructure.items()
+            })
+
+
+            # fetch locally
+            isFileFlag = os.path.isfile(completeFilePath)
+            # check whether csv-file exists. If not:
+            if isFileFlag:
+                df = cls.fetchDataLocally(whichData=whichData)
+                print('the columns are_: ', df.columns)
+                df_new = df.merge(df_new, on=list(df.columns), how="outer").copy()
+
+            df_new.to_csv(completeFilePath, sep=',')
+            print('the columns are :', df_new.columns)
+            cls._setInfoFromTableName(whichData=whichData, key="update", value=str(dt.now()))
+
         return req.status_code
 
+
+    @classmethod
+    def _ping(cls):
+        req = requests.get('https://api.coingecko.com/api/v3/ping')
+        if req.status_code != 200:
+            raise cls.cannotReachAPIEndpoint(req.status_code)
+        return req.status_code
+        
+
+
+def get_data(data, specs):
+    """Recursive function to extract the desired time series from the data using the specs.
+
+    Args:
+        data ([type]): [description]
+        specs ([type]): [description]
+
+    Raises:
+        Exception: [description]
+        e: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    if len(specs)==0:
+        return data
+
+    spec = specs.pop(0)
+    type_of_operation = spec[0]
+    try:
+        if type_of_operation=="method":
+            method_name = spec[1]
+            args = spec[2]
+            kwargs = spec[3]
+            data = getattr(data, method_name)(*args, **kwargs)
+        elif type_of_operation=="attribute":
+            attribute_name = spec[1]            
+            data = getattr(data, attribute_name)
+        elif type_of_operation=="function":
+            function_name = spec[1]
+            args = spec[2]
+            kwargs = spec[3]
+            data = globals()[function_name](*args, **kwargs)
+        elif type_of_operation=="module":
+            module_name = spec[1]
+            submodule_names = spec[2]
+            args = spec[3]
+            kwargs = spec[4]
+            obj = globals()[module_name]
+            for submodule in submodule_names:
+                obj = getattr(obj, submodule)
+            data = obj(data, *args, **kwargs)
+        else:
+            raise Exception('Neither method, nor function nor module! Please select!')
+            
+    except Exception as e:
+        raise e
+
+    return get_data(data=data, specs=specs)
