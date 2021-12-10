@@ -31,16 +31,24 @@ def stablecoinRevertingRate(x, delta=60, with_sigma=False):
     """mean reverting rate of a process centered around 1 (stable coin case).
 
     Args:
-        x ([type]): [description]
-        delta (int, optional): [description]. Defaults to 60.
-        with_sigma (bool, optional): [description]. Defaults to False.
+        x (numpy.ndarray): time series of the stable coin price with respect to its peg asset (should be pegged to 1)
+        delta (int, optional): conversion rate of data granualirity to minutes. Defaults to 60.
+        with_sigma (bool, optional): return the volatility, too. Defaults to False.
 
     Returns:
-        [type]: [description]
+        float or tuple: either a float with the reverting rate or a tuple of reverting rate and volatility.
     """
     return revertingRate(x=x-1, delta=delta, with_sigma=with_sigma)
 
 
 def hurstExponent(x):
+    """Hurst Exponent of the time series
+
+    Args:
+        x (numpy.ndarray): one dimensional numpy array of time series
+
+    Returns:
+        float: Hurst exponent between 0 and 1, where 0.5 is a random walk.
+    """
     H, _, _ = compute_Hc(x, kind='random_walk', simplified=True)
     return H
