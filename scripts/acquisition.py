@@ -89,17 +89,67 @@ class Acquisition():
             if not downloadIfMissing or status!=200:
                 raise cls.cannotGetTableException
 
-        # If csv-file exists, then:
-        else:
-            # only update when forceUpdate flag is put
-            if forceUpdate:
-                status = cls.updateDataLocally(whichData=whichData, **kwargs)
-                if status!=200:
-                    raise cls.cannotGetTableException
-            
+
         returnData = cls.fetchDataLocally(whichData=whichData, **kwargs)
 
+        # only update when forceUpdate flag is put or new data is requested
+        if "from" in kwargs and "to" in kwargs:
+            minBiggerFrom = int(returnData.time.min() / 1000) > int(kwargs["from"])
+            maxSmallerTo = int(returnData.time.max() / 1000) < int(kwargs["to"])
+            newDataRequested = minBiggerFrom or maxSmallerTo
+        else:
+            newDataRequested = False
+
+        if forceUpdate or newDataRequested:
+            status = cls.updateDataLocally(whichData=whichData, **kwargs)
+            if status!=200:
+                raise cls.cannotGetTableException
+            
+            returnData = cls.fetchDataLocally(whichData=whichData, **kwargs)
+
         return returnData
+
+
+    @classmethod
+    def timeIntervalOfData(cls, whichData, form='datetime'):
+        returnData = cls.fetchDataLocally(whichData=whichData)
+        minTimestamp = returnData.time.min()
+        maxTimestamp = returnData.time.max()
+        if form=='timestamp':
+            return int(minTimestamp), int(maxTimestamp)
+        elif form=='datetime':
+            return dt.fromtimestamp(minTimestamp / 1000), dt.fromtimestamp(maxTimestamp / 1000)
+        else:
+            raise Exception('Please provide a valid form. Either form="timestamp" or form="datetime"')
+        
+
+    @classmethod
+    def readDataFromURL(cls, whichData, **kwargs):
+
+        dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
+        defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
+        apiRawParams = cls._getInfoFromTableName(whichData=whichData, info="api_raw_params")
+        dataStructure = cls._getInfoFromTableName(whichData=whichData, info="data_structure")
+        dataApiFormatted = dataAPI.format(**apiRawParams)
+        defaultParams.update(kwargs)
+        req = requests.get(dataApiFormatted, params=defaultParams)
+        if req.status_code==200:
+
+            df = pd.DataFrame(data={
+                key: get_data(data=req.json(),specs=val)
+                for key, val in dataStructure.items()
+            })
+        else:
+            df = pd.DataFrame()
+    
+        # drop duplicates
+        if 'time' in df:
+            df.drop_duplicates(subset='time', inplace=True)
+        else:
+            df.drop_duplicates(inplace=True)
+
+        return df, req.status_code
+
 
 
     @classmethod
@@ -116,9 +166,11 @@ class Acquisition():
         
         df = pd.read_csv(completeFilePath, sep=',', index_col=0)
         if "from" in kwargs and "to" in kwargs:
-            return df[(df.time<=kwargs["to"]) & (df.time>=kwargs["from"])].copy()
+
+            return df[(df.time<=(kwargs["to"] * 1000)) & (df.time>=(kwargs["from"] * 1000))].copy()
         
         return df
+
 
 
     @classmethod
@@ -132,6 +184,7 @@ class Acquisition():
             int: status code for the request
         """
 
+        ## TODO!! Use readDataFromURL method here.
         completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
         dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
         defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
@@ -153,11 +206,15 @@ class Acquisition():
             # check whether csv-file exists. If not:
             if isFileFlag:
                 df = cls.fetchDataLocally(whichData=whichData)
-                print('the columns are_: ', df.columns)
                 df_new = df.merge(df_new, on=list(df.columns), how="outer").copy()
 
+            # drop duplicates
+            if 'time' in df_new:
+                df_new.drop_duplicates(subset='time', inplace=True)
+            else:
+                df_new.drop_duplicates(inplace=True)
+   
             df_new.to_csv(completeFilePath, sep=',')
-            print('the columns are :', df_new.columns)
             cls._setInfoFromTableName(whichData=whichData, key="update", value=str(dt.now()))
 
         return req.status_code
