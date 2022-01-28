@@ -4,7 +4,8 @@
     "update": 0,
     "api": "https://api.coingecko.com/api/v3/asset_platforms",
     "api_raw_params": {},
-    "default_params": {}
+    "default_params": {},
+    "format": "json"
   },
   "cg_supported_coins": {
     "filename": "coingecko/supported_coins.json",
@@ -13,11 +14,20 @@
     "api_raw_params": {},
     "default_params": {
       "include_platform": "true"
-    }
+    },
+    "format": "json"
+  },
+  "cg_exchanges": {
+    "filename": "coingecko/exchanges.json",
+    "format": "json",
+    "update": "2021-12-22 19:56:37.748140",
+    "api": "https://api.coingecko.com/api/v3/exchanges/list",
+    "api_raw_params": {},
+    "default_params": {}
   },
   "cg_dai_usd": {
     "filename": "coingecko/dai_usd.csv",
-    "update": "2021-12-16 19:25:27.582417",
+    "update": "2021-12-30 14:14:19.075895",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "dai"
@@ -121,7 +131,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -151,12 +161,76 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_frax_usd": {
     "filename": "coingecko/frax_usd.csv",
-    "update": "2021-12-16 19:25:28.821435",
+    "update": "2021-12-30 14:14:20.065605",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "frax"
@@ -260,7 +334,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -290,12 +364,76 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_mim_usd": {
     "filename": "coingecko/mim_usd.csv",
-    "update": "2021-12-16 19:25:29.101752",
+    "update": "2022-01-07 14:56:15.293167",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "magic-internet-money"
@@ -399,7 +537,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -429,12 +567,76 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_btc_usd": {
     "filename": "coingecko/btc_usd.csv",
-    "update": 0,
+    "update": "2021-12-23 00:05:47.727744",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "bitcoin"
@@ -538,7 +740,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -568,8 +770,72 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_mkr_usd": {
     "filename": "coingecko/mkr_usd.csv",
@@ -677,7 +943,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -707,12 +973,76 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_ust_usd": {
     "filename": "coingecko/ust_usd.csv",
-    "update": "2021-12-16 19:25:27.989475",
+    "update": "2021-12-30 14:14:19.359297",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "terrausd"
@@ -816,7 +1146,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -846,12 +1176,1700 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_usdp_usd": {
+    "filename": "coingecko/usdp_usd.csv",
+    "update": "2021-12-30 14:14:20.734568",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "paxos-standard"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_alusd_usd": {
+    "filename": "coingecko/alusd_usd.csv",
+    "update": "2021-12-30 14:14:21.223188",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "alchemix-usd"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_lusd_usd": {
+    "filename": "coingecko/lusd_usd.csv",
+    "update": "2021-12-30 14:14:21.501003",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "liquity-usd"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_susd_usd": {
+    "filename": "coingecko/susd_usd.csv",
+    "update": "2021-12-30 14:14:23.169940",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "nusd"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_busd_usd": {
+    "filename": "coingecko/busd_usd.csv",
+    "update": "2021-12-30 14:14:22.453247",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "binance-usd"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_gusd_usd": {
+    "filename": "coingecko/gusd_usd.csv",
+    "update": "2021-12-30 14:14:21.838670",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "gemini-dollar"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_tusd_usd": {
+    "filename": "coingecko/tusd_usd.csv",
+    "update": "2021-12-30 14:14:22.122152",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "true-usd"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_spell_usd": {
+    "filename": "coingecko/spell_usd.csv",
+    "update": "2022-01-07 14:56:57.360291",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "spell-token"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
   },
   "cg_usdt_usd": {
     "filename": "coingecko/usdt_usd.csv",
-    "update": "2021-12-16 19:25:28.421207",
+    "update": "2021-12-30 14:14:19.765288",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "tether"
@@ -955,7 +2973,7 @@
           {}
         ]
       ],
-      "time": [
+      "time_price": [
         [
           "method",
           "get",
@@ -985,7 +3003,326 @@
           ],
           {}
         ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
       ]
-    }
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "cg_usdc_usd": {
+    "filename": "coingecko/usdc_usd.csv",
+    "update": "2021-12-30 14:14:23.476250",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "usd-coin"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "es_mim_tx_5000": {
+    "filename": "blockscanner/MIM_transactions_first_5000.csv",
+    "update": "2022-12-30 14:37:23.475850",
+    "api": null,
+    "api_raw_params": {},
+    "default_params": {},
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
+  "es_blockscanner_url": {
+    "filename": "blockscanner/block_scanner_url.json",
+    "update": "2022-12-30 14:37:23.475850",
+    "api": null,
+    "api_raw_params": {},
+    "default_params": {},
+    "data_structure": {},
+    "index": "time",
+    "format": "json"
   }
 }
