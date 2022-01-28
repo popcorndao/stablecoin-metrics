@@ -24,7 +24,10 @@ class Acquisition():
     noSuchInfoException = Exception('No such information exists for this table. Please see the ./data directory for allowed information keys and either use one of the existing keys or add this new key to the list together with the required value.')
     cannotGetTableException = Exception('We cannot retrieve the data from this table, either because the api request failed or because you have requested not to get the data in the first place (check attributes of the methods you used).')
     cannotReachAPIEndpoint = lambda status: Exception('We pinged the API endpoint and cannot get through, because the status-code is: {code}.'.format(code=status))
-
+    noSuchFileExtensionException = Exception("Please specify any of the allowed fileFormats in the data_sources.json file.")
+    noSuchIndexInSpecs = Exception("There is no such index in the specs. Please check with the data_sources.json for that table and add that index to the data_structure key!")
+    noOfEqualLengths = Exception("The data from the table is not of equal length!")
+    notAllColumnsHaveAnIndex = Exception("This table has at least one column that does not have a corresponding index! Please check the data_sources.json file!")
 
     @classmethod
     def _setInfoFromTableName(cls, whichData, key="update", value=str(dt.now())):
@@ -32,7 +35,7 @@ class Acquisition():
 
 
     @classmethod
-    def _getInfoFromTableName(cls, whichData, info="filename"):
+    def _getInfoFromTableName(cls, whichData, info="filename", raiseOrNone='raise'):
         """method to obtain information about the data table
 
         Args:
@@ -48,18 +51,28 @@ class Acquisition():
         """
         if whichData not in CONFIG.DataSources:
             raise cls.noSuchTableException
+        
         if info=="filename":
             if info not in CONFIG.DataSources[whichData]:
-                raise cls.noSuchInfoException
+                if raiseOrNone=='raise':
+                    raise cls.noSuchInfoException
+                else:
+                    return None
             filename = CONFIG.DataSources[whichData][info]
             return deepcopy(os.path.join(CONFIG.DataDirectory, filename))
         elif info=="api":
             if info not in CONFIG.DataSources[whichData]:
-                raise cls.noSuchInfoException
+                if raiseOrNone=='raise':
+                    raise cls.noSuchInfoException
+                else:
+                    return None
             return deepcopy(CONFIG.DataSources[whichData][info])
         else:
             if info not in CONFIG.DataSources[whichData]:
-                raise cls.noSuchInfoException
+                if raiseOrNone=='raise':
+                    raise cls.noSuchInfoException
+                else:
+                    return None
             return deepcopy(CONFIG.DataSources[whichData][info])
 
 
@@ -79,11 +92,9 @@ class Acquisition():
             dict or list: return data from jsonized data-table. 
         """
 
-        completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
-        isFileFlag = os.path.isfile(completeFilePath)
         
         # check whether csv-file exists. If not:
-        if not isFileFlag:
+        if not cls.doesFileExist(whichData=whichData):
             if downloadIfMissing:
                 status = cls.updateDataLocally(whichData=whichData, **kwargs)
             if not downloadIfMissing or status!=200:
@@ -125,52 +136,75 @@ class Acquisition():
 
     @classmethod
     def readDataFromURL(cls, whichData, **kwargs):
-
+        # TODO: include option for json files.
         dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
         defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
         apiRawParams = cls._getInfoFromTableName(whichData=whichData, info="api_raw_params")
-        dataStructure = cls._getInfoFromTableName(whichData=whichData, info="data_structure")
+        fileFormat = cls._getInfoFromTableName(whichData=whichData, info="format")
         dataApiFormatted = dataAPI.format(**apiRawParams)
         defaultParams.update(kwargs)
         req = requests.get(dataApiFormatted, params=defaultParams)
         if req.status_code==200:
-
-            df = pd.DataFrame(data={
-                key: get_data(data=req.json(),specs=val)
-                for key, val in dataStructure.items()
-            })
+            if fileFormat=="csv":
+                data = cls.getDataFrameFromRequest(request=req, whichData=whichData)
+            elif fileFormat=="json":
+                data = req.json()
+            else:
+                raise cls.noSuchFileExtensionException
         else:
-            df = pd.DataFrame()
+            if fileFormat=="csv":
+                data = pd.DataFrame()
+            elif fileFormat=="json":
+                data = dict()
+            else:
+                raise cls.noSuchFileExtensionException
     
         # drop duplicates
-        if 'time' in df:
-            df.drop_duplicates(subset='time', inplace=True)
-        else:
-            df.drop_duplicates(inplace=True)
+        if fileFormat=="csv":
+            if 'time' in data:
+                data.drop_duplicates(subset='time', inplace=True)
+            else:
+                data.drop_duplicates(inplace=True)
 
-        return df, req.status_code
 
+        return data, req.status_code
+
+
+    @classmethod
+    def doesFileExist(cls, whichData):
+        completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
+        return os.path.isfile(completeFilePath)
 
 
     @classmethod
     def fetchDataLocally(cls, whichData, **kwargs):
         completeFilePath = cls._getInfoFromTableName(whichData=whichData, info="filename")
-        isFileFlag = os.path.isfile(completeFilePath)
+        fileFormat = cls._getInfoFromTableName(whichData=whichData, info="format")
         
         # check whether csv-file exists. If not:
-        if not isFileFlag:
-            return pd.DataFrame()
+        if not cls.doesFileExist(whichData=whichData):
+            if fileFormat=="csv":
+                return pd.DataFrame()
+            elif fileFormat=="json":
+                return dict()
 
-        if not kwargs:
-            return pd.read_csv(completeFilePath, sep=',', index_col=0)
-        
-        df = pd.read_csv(completeFilePath, sep=',', index_col=0)
-        if "from" in kwargs and "to" in kwargs:
+        if fileFormat=="csv":
+            if not kwargs:
+                return pd.read_csv(completeFilePath, sep=',', index_col=0)
+            
+            df = pd.read_csv(completeFilePath, sep=',', index_col=0)
+            if "from" in kwargs and "to" in kwargs:
 
-            return df[(df.time<=(kwargs["to"] * 1000)) & (df.time>=(kwargs["from"] * 1000))].copy()
-        
-        return df
+                return df[(df.time<=(kwargs["to"] * 1000)) & (df.time>=(kwargs["from"] * 1000))].copy()
+            
+            return df
+        elif fileFormat=="json":
+            with open(completeFilePath, "r") as jsonfile:
+                data = json.load(jsonfile)
+            return data
 
+        else:
+            raise cls.noSuchFileExtensionException
 
 
     @classmethod
@@ -189,35 +223,91 @@ class Acquisition():
         dataAPI = cls._getInfoFromTableName(whichData=whichData, info="api")
         defaultParams = cls._getInfoFromTableName(whichData=whichData, info="default_params")
         apiRawParams = cls._getInfoFromTableName(whichData=whichData, info="api_raw_params")
-        dataStructure = cls._getInfoFromTableName(whichData=whichData, info="data_structure")
+        fileFormat = cls._getInfoFromTableName(whichData=whichData, info="format")
         dataApiFormatted = dataAPI.format(**apiRawParams)
         defaultParams.update(kwargs)
         req = requests.get(dataApiFormatted, params=defaultParams)
         if req.status_code==200:
 
-            df_new = pd.DataFrame(data={
-                key: get_data(data=req.json(),specs=val)
-                for key, val in dataStructure.items()
-            })
+            if fileFormat=="csv":
+                data_new = cls.getDataFrameFromRequest(request=req, whichData=whichData)
+            elif fileFormat=="json":
+                data_new = req.json()
+            else:
+                raise cls.noSuchFileExtensionException
 
 
             # fetch locally
-            isFileFlag = os.path.isfile(completeFilePath)
             # check whether csv-file exists. If not:
-            if isFileFlag:
-                df = cls.fetchDataLocally(whichData=whichData)
-                df_new = df.merge(df_new, on=list(df.columns), how="outer").copy()
+            if cls.doesFileExist(whichData=whichData):
+                data = cls.fetchDataLocally(whichData=whichData)
+                if fileFormat=="csv":
+                    data_new = data.merge(data_new, on=list(data.columns), how="outer").copy()
+                elif fileFormat=="json":
+                    data.update(data_new)
+                    data_new = data
+                else:
+                    raise cls.noSuchFileExtensionException
+
 
             # drop duplicates
-            if 'time' in df_new:
-                df_new.drop_duplicates(subset='time', inplace=True)
-            else:
-                df_new.drop_duplicates(inplace=True)
+            if fileFormat=="csv":
+                if 'time' in data_new:
+                    data_new.drop_duplicates(subset='time', inplace=True)
+                else:
+                    data_new.drop_duplicates(inplace=True)
    
-            df_new.to_csv(completeFilePath, sep=',')
+                data_new.to_csv(completeFilePath, sep=',')
+
+            elif fileFormat=="json":
+                with open(completeFilePath, "w") as jsonfile:
+                    json.dump(data_new, jsonfile, indent=2)
+
             cls._setInfoFromTableName(whichData=whichData, key="update", value=str(dt.now()))
 
         return req.status_code
+
+    @classmethod
+    def requestInterface(cls, address, chainId=1, networkName=None):
+        URLs = cls.fetchDataLocally(whichData="es_blockscanner_url")
+        if networkName is not None:
+            URL = URLs[networkName]["url"]
+            chainId = URLs[networkName]["chainId"]
+        else:
+            networkURLsList = lambda chainId: [(network, specs["url"]) for network, specs in URLs.items() if specs["chainId"]==chainId]
+            networkURLs = networkURLsList(chainId)
+            if networkURLs:
+                URL = networkURLs[0][1]
+                networkName = networkURLs[0][0]
+            else:
+                ## assume chainId=1
+                chainId = 1
+                networkURLs = networkURLsList(chainId)
+                URL = networkURLs[0][1]
+                networkName = networkURLs[0][0]
+
+        ABI_URL = cls.getABIurl(URL=URL, address=address)
+        resp = requests.get(ABI_URL)
+        try:
+            interface = json.loads(resp.json()['result'])
+        except Exception as ex:
+            interface = str(ex)
+
+        return {
+            "interface": interface,
+            "address": address,
+            "chainId": chainId,
+            "networkName": networkName,
+            "url": URL,
+            "ABI_URL": ABI_URL
+            }
+
+    @classmethod
+    def getABIurl(cls, URL, address):
+        return '{URL}/api?module=contract&action=getabi&address={address}'.format(
+                    URL=URL,
+                    address=address
+                )
 
 
     @classmethod
@@ -227,6 +317,47 @@ class Acquisition():
             raise cls.cannotReachAPIEndpoint(req.status_code)
         return req.status_code
         
+    @classmethod
+    def getDataFrameFromRequest(cls, request, whichData):
+        dataStructure = cls._getInfoFromTableName(whichData=whichData, info="data_structure")
+        index = cls._getInfoFromTableName(whichData=whichData, info="index", raiseOrNone="None")
+        
+        if index is not None:
+            # get index header pairs
+            index_header_pair = dict()
+            for header in dataStructure.keys():
+                if header.startswith(index + '_'):
+                    continue 
+                ind = index + '_' + header
+                if ind not in dataStructure:
+                    raise cls.notAllColumnsHaveAnIndex
+                index_header_pair[ind] = header
+            
+            # get series for each index_header pair:
+            df = pd.DataFrame()
+            data = request.json()
+            for ind, header in index_header_pair.items():
+                header_data = get_data(data=request.json(),specs=dataStructure[header])
+                index_data = get_data(data=request.json(),specs=dataStructure[ind])
+                ser = pd.Series({idx: value for idx, value in zip(index_data, header_data)}, name=header)
+                df = df.join(ser, how='outer')
+            df.index.name = index
+            df.reset_index(level=0, inplace=True)
+            return df
+
+        else:
+            # there is no index
+            data = {key: get_data(data=request.json(),specs=val)
+                    for key, val in dataStructure.items()}
+            lengths = {key: len(val) for key, val in data.items()}
+            if len(lengths)>0:
+                if all(l==l[0] for l in lengths.values()):
+                    return pd.DataFrame(data=data)
+                else:
+                    raise cls.noOfEqualLengths
+            else:
+                return pd.DataFrame()
+
 
 
 def get_data(data, specs):

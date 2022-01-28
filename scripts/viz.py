@@ -22,10 +22,10 @@ def createBasicAnalysisPlot(df, fontsize = 16, ticksize = 12, title='DAI to USD'
     axes[0].tick_params(axis='both', which='major', labelsize=ticksize)
     axes[0].grid()
 
-    axes[1].plot(df["date"], df["reversion"], '-r')
+    axes[1].plot(df["date"], df["rate"], '-r')
     axes[1].fill_between(df["date"],
-                         df["reversion"] + df["reversion_error"], 
-                         df["reversion"] - df["reversion_error"],
+                         df["rate"] + df["rate_error"], 
+                         df["rate"] - df["rate_error"],
                          color='red', alpha=.4)
     axes[1].set(ylim=[0, 0.25],
                 ylabel='reversion rate to peg [$h^{-1}$]',
@@ -39,15 +39,15 @@ def createBasicAnalysisPlot(df, fontsize = 16, ticksize = 12, title='DAI to USD'
     axes[1].tick_params(axis='both', which='major', labelsize=ticksize)
 
     secax[1] = axes[1].twinx()
-    secax[1].plot(df["date"], df["volatility"], '-g')
+    secax[1].plot(df["date"], df["sigma"], '-g')
     secax[1].fill_between(df["date"],
-                          df["volatility"] + df["volatility_error"], 
-                          df["volatility"] - df["volatility_error"],
+                          df["sigma"] + df["sigma_error"], 
+                          df["sigma"] - df["sigma_error"],
                           color='green', alpha=.4)
-    secax[1].set(ylim=[0, 0.005], ylabel='volatility')
+    secax[1].set(ylim=[0, 0.005], ylabel='sigma')
     secax[1].yaxis.label.set_color('green')
     secax[1].yaxis.label.set_fontsize(fontsize)
-    secax[1].legend(labels=["volatility"], loc=(0.005, 0.85))
+    secax[1].legend(labels=["sigma"], loc=(0.005, 0.85))
     secax[1].tick_params(axis='both', which='major', labelsize=ticksize)
     axes[1].grid()
     

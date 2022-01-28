@@ -41,7 +41,7 @@ def perturbator(x, epsilon):
 
 
 
-def revertingRate(x, delta=24.0, with_sigma=False, discount_factor=0.):
+def revertingRate(x, delta=24.0, with_sigma=False, weights=None):
     """mean reverting rate for processes centered around 0. 
 
     Args:
@@ -56,9 +56,7 @@ def revertingRate(x, delta=24.0, with_sigma=False, discount_factor=0.):
     xn = x[0:(len(x)-1)]
     xm = x[1:(len(x))]
     xnre = xn.reshape((-1,1))
-    if discount_factor>0:
-        weights = list(discount(n=len(xm),factor=discount_factor, normalize=True))
-        weights.reverse()
+    if weights is not None:
         model = LinearRegression().fit(X=xnre, y=xm, sample_weight=weights)
     else:
         model = LinearRegression().fit(X=xnre, y=xm)
@@ -76,7 +74,7 @@ def revertingRate(x, delta=24.0, with_sigma=False, discount_factor=0.):
     return {"kappa": kappa, "sigma": None}
 
 
-def stablecoinRevertingRate(x, delta=24.0, with_sigma=False, discount_factor=0):
+def stablecoinRevertingRate(x, delta=24.0, with_sigma=False, weights=None):
     """mean reverting rate of a process centered around 1 (stable coin case).
 
     Args:
@@ -87,12 +85,12 @@ def stablecoinRevertingRate(x, delta=24.0, with_sigma=False, discount_factor=0):
     Returns:
         float or tuple: either a float with the reverting rate or a tuple of reverting rate and volatility.
     """
-    return revertingRate(x=x-1, delta=delta, with_sigma=with_sigma, discount_factor=discount_factor)
+    return revertingRate(x=x-1, delta=delta, with_sigma=with_sigma, weights=weights)
 
 
-def revertingRateWithError(x, delta=24., discount_factor=0., with_sigma=True, sample_error=0.001):
+def revertingRateWithError(x, delta=24., weights=None, with_sigma=True, sample_error=0.001):
     kwargs = dict(delta=delta,
-                  discount_factor=discount_factor,
+                  weights=weights,
                   with_sigma=with_sigma)
     kappa_devs = np.zeros(len(x))
     sigma_devs = np.zeros(len(x))
@@ -111,7 +109,7 @@ def revertingRateWithError(x, delta=24., discount_factor=0., with_sigma=True, sa
     return null_res
 
 
-def stablecoinRevertingRateWithError(x, delta=24.0, with_sigma=False, discount_factor=0, sample_error=0.001):
+def stablecoinRevertingRateWithError(x, delta=24.0, with_sigma=False, weights=None, sample_error=0.001):
     """mean reverting rate of a process centered around 1 (stable coin case).
 
     Args:
@@ -122,7 +120,7 @@ def stablecoinRevertingRateWithError(x, delta=24.0, with_sigma=False, discount_f
     Returns:
         float or tuple: either a float with the reverting rate or a tuple of reverting rate and volatility.
     """
-    return revertingRateWithError(x - 1, delta=delta, discount_factor=discount_factor, with_sigma=with_sigma, sample_error=sample_error)
+    return revertingRateWithError(x - 1, delta=delta, weights=weights, with_sigma=with_sigma, sample_error=sample_error)
 
 
 
