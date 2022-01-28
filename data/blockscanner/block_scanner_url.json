@@ -1,0 +1,10 @@
+{
+    "ethereum-mainnet":{
+        "chainId": 1,
+        "url": "https://api.etherscan.io"
+    },
+    "fantom-opera":{
+        "chainId":250,
+        "url": "https://api.ftmscan.com"
+    }
+}
