@@ -1448,7 +1448,7 @@
   },
   "cg_alusd_usd": {
     "filename": "coingecko/alusd_usd.csv",
-    "update": "2021-12-30 14:14:21.223188",
+    "update": "2022-03-14 16:06:55.004994",
     "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
     "api_raw_params": {
       "coinId": "alchemix-usd"
