@@ -3476,6 +3476,209 @@
     "index": "time",
     "format": "csv"
   },
+  "cg_ousd_usd": {
+    "filename": "coingecko/ousd_usd.csv",
+    "update": "2022-03-14 15:50:51.831646",
+    "api": "https://api.coingecko.com/api/v3/coins/{coinId}/market_chart/range",
+    "api_raw_params": {
+      "coinId": "origin-dollar"
+    },
+    "default_params": {
+      "vs_currency": "usd",
+      "from": 1574035200,
+      "to": 1637937555
+    },
+    "data_structure": {
+      "price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            1
+          ],
+          {}
+        ]
+      ],
+      "time_price": [
+        [
+          "method",
+          "get",
+          [
+            "prices"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_total_volume": [
+        [
+          "method",
+          "get",
+          [
+            "total_volumes"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ],
+      "time_market_cap": [
+        [
+          "method",
+          "get",
+          [
+            "market_caps"
+          ],
+          {}
+        ],
+        [
+          "module",
+          "np",
+          [
+            "array"
+          ],
+          [],
+          {}
+        ],
+        [
+          "attribute",
+          "T"
+        ],
+        [
+          "method",
+          "__getitem__",
+          [
+            0
+          ],
+          {}
+        ]
+      ]
+    },
+    "index": "time",
+    "format": "csv"
+  },
   "cg_usdn_usd": {
     "filename": "coingecko/usdn_usd.csv",
     "update": "2022-03-14 15:34:42.084975",
